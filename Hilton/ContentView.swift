@@ -9,8 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var username: String = ""
-    @State private var isCheckInPageActive = false
-    @State private var isLoginPageActive = false
+    @State private var isHotelCodeViewActive = false
+    @State private var isChecked: Bool = false
+    @State private var showErrorAlert = false
+
     
     var body: some View {
         
@@ -65,60 +67,77 @@ struct ContentView: View {
                         Spacer()
                     }
                     
-                    Group{
-                        
-                        HStack{
-                            
-                            Spacer()
-                            
-                            Toggle(isOn: /*@PLACEHOLDER=Is On@*/.constant(true)) {
-                                
-                            }
-                            .padding(.trailing, 340.0)
-                            
-                            
-                            
-                            Text("I agree terms and conditions.")
-                                .multilineTextAlignment(.leading)
-                                .padding(.leading, -330.0)
-                            
-                            Spacer()
-                            Spacer()
-                        }
-                    }
-                    
-                    Group{
-                    
-                        Button(action: {
-                        // Check-in button action
-                        isCheckInPageActive = true
-                    }) {
-                        Text("Check-in")
-                            .font(.headline)
-                            .foregroundColor(Color.white)
-                            .frame(width: 300.0, height: 20.0)
-                            .padding()
-                            .background(Color.green)
-                            .cornerRadius(10)
-                    }
-                    .padding(.top, 5.0)
-                    .frame(width: 80.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/100.0)
+                    //Terms and Conditions
                     
                     Button(action: {
-                        // Login button action
-                        isLoginPageActive = true
-                    }) {
-                        Text("Login")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(width: 300.0, height: 20.0)
-                            .padding()
-                            .background(Color(red: 0.872, green: 0.814, blue: 0.78))
-                            .cornerRadius(10)
+                                    isChecked.toggle()
+                                }) {
+                                    HStack {
+                                        if isChecked {
+                                            Image(systemName: "checkmark.square.fill")
+                                                .foregroundColor(.green)
+                                        } else {
+                                            Image(systemName: "square")
+                                                .foregroundColor(.gray)
+                                        }
+                                        Text("I agree with terms of services.")
+                                    }
+                                }
+                    
+                  
+                    Group {
+                        Button(action: {
+                            // Check-in button action
+                            if isChecked {
+                                isHotelCodeViewActive = true
+                            } else {
+                                // Hata mesajı göster
+                                showErrorAlert = true
+                            }
+                        }) {
+                            Text("Check-in")
+                                .font(.headline)
+                                .foregroundColor(Color.white)
+                                .frame(width: 300.0, height: 20.0)
+                                .padding()
+                                .background(Color.green)
+                                .cornerRadius(10)
+                        }
+                        .padding(.top, 5.0)
+                        .frame(width: 80.0, height: 100.0)
+                        .disabled(!isChecked) // isChecked değerine göre butonun etkinlik durumunu ayarla
+                        
+                        Button(action: {
+                            // Login button action
+                            if isChecked {
+                                isHotelCodeViewActive = true
+                            } else {
+                                // Hata mesajı göster
+                                showErrorAlert = true
+                            }
+                        }) {
+                            Text("Login")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(width: 300.0, height: 20.0)
+                                .padding()
+                                .background(Color(red: 0.872, green: 0.814, blue: 0.78))
+                                .cornerRadius(10)
+                        }
+                        .padding(.bottom, 10.0)
+                        .disabled(!isChecked) // isChecked değerine göre butonun etkinlik durumunu ayarla
+                        
+                        Spacer()
                     }
-                    .padding(.bottom, 10.0)
-                    Spacer()
-                }
+                    .alert(isPresented: $showErrorAlert) {
+                        Alert(
+                            title: Text("Hata"),
+                            message: Text("Please agree to the terms"),
+                            dismissButton: .default(Text("Tamam"))
+                        )
+                    }
+
+
 
                     HStack{
                         
@@ -144,7 +163,7 @@ struct ContentView: View {
                         
                         HStack {
                             Button(action: {}) {
-                                Text("ABOUT |")
+                                Text("ABOUT  |")
                             }
                             Button(action: {}) {
                                 Text("CONTACT")
@@ -159,39 +178,18 @@ struct ContentView: View {
                    
                 }
                 
+               
                 .navigationBarHidden(true)
-                .sheet(isPresented: $isLoginPageActive) {
-                    LoginPage()
-                }
-                .navigationBarHidden(true)
-                .sheet(isPresented: $isCheckInPageActive) {
-                    CheckInPage()
+                .sheet(isPresented: $isHotelCodeViewActive) {
+                    HotelCodeView()
                 }
                 
                 
             }
         }
     }
+
     
-    struct CheckInPage: View {
-        var body: some View {
-            VStack {
-                Text("Check-in Page")
-                    .font(.title)
-                    .padding()
-            }
-        }
-  }
-    
-    struct LoginPage: View {
-        var body: some View {
-            VStack {
-                Text("Login Page")
-                    .font(.title)
-                    .padding()
-            }
-        }
-  }
     
 }
 
