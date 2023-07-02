@@ -119,10 +119,13 @@ struct LoginView: View {
                         .disabled(!isChecked)
                         
                         Button(action: {
+                           
                             // Check-in button action
                             if isChecked {
                                 isLoginViewActive = true
-                            } else {
+                            }
+                            
+                            else {
                                 // Hata mesajı göster
                                 print("Invalid Hotel Code or Agreement")
                             }

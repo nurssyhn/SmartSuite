@@ -104,7 +104,7 @@ struct HotelCodeView: View {
                         }
                         .padding(.top, 5.0)
                         .frame(width: 80.0, height: 100.0)
-                        .disabled(!(HotelCode == "abc124" && isChecked))
+                        .disabled(!(HotelCode == "Abc124" && isChecked))
                         .sheet(isPresented: $isLoginViewActive) {
                             LoginView()
                         }
